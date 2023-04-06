@@ -1,11 +1,14 @@
 package com.example.myzipzap;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,9 +26,9 @@ import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
-    Button forgotPasswordBtn;
+
     Button loginBtn;
-    TextView registerHereTV;
+    TextView registerHereTV,forgotPasswordTV;
     TextInputEditText loginEmailET,loginPasswordET;
         ProgressBar loginProgressBar;
 
@@ -33,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //forgotPasswordBtn = (Button) findViewById(R.id.forgotPasswordBtn);
+        forgotPasswordTV = findViewById(R.id.forgotPasswordTV);
         loginBtn =(Button) findViewById(R.id.loginBtn);
         registerHereTV = findViewById(R.id.registerHereTV);
         loginEmailET = findViewById(R.id.loginEmailET);
@@ -47,7 +50,51 @@ public class LoginActivity extends AppCompatActivity {
         registerHereTV.setOnClickListener(view ->{
             startActivity( new Intent(LoginActivity.this, Register.class));
         });
+
+
+        forgotPasswordTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot, null);
+                EditText emailBox = dialogView.findViewById(R.id.emailBox);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String userEmail = emailBox.getText().toString();
+                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
+                            Toast.makeText(LoginActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        mAuth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(LoginActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "Failed to send", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
+            }
+        });
     }
+
     private void loginUser() {
         loginProgressBar.setVisibility(View.VISIBLE);
         String email = loginEmailET.getText().toString();
