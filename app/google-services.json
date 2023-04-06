@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "742329739713",
+    "project_id": "myzipzap-7e839",
+    "storage_bucket": "myzipzap-7e839.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:742329739713:android:c639977b3e7478ca98e740",
+        "android_client_info": {
+          "package_name": "com.example.myzipzap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "742329739713-m4e188j3bfq1i64uf7tidkhbj8o6f2ku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgEMlCBMSKvqIayQMD-xQqxXE-gk5GKAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "742329739713-m4e188j3bfq1i64uf7tidkhbj8o6f2ku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
