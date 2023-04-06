@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
     TextView registerHereTV;
     TextInputEditText loginEmailET,loginPasswordET;
+        ProgressBar loginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         registerHereTV = findViewById(R.id.registerHereTV);
         loginEmailET = findViewById(R.id.loginEmailET);
         loginPasswordET = findViewById(R.id.loginPasswordET);
+        loginProgressBar = findViewById(R.id.loginProgressBar);
+
         mAuth = FirebaseAuth.getInstance();
         loginBtn.setOnClickListener(view ->{
             loginUser();
@@ -44,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void loginUser() {
+        loginProgressBar.setVisibility(View.VISIBLE);
         String email = loginEmailET.getText().toString();
         String password = loginPasswordET.getText().toString();
         if (TextUtils.isEmpty(email)){
@@ -55,9 +61,10 @@ public class LoginActivity extends AppCompatActivity {
             loginPasswordET.requestFocus();
 
         }else{
-            mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
+                    loginProgressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()){
                         Toast.makeText(LoginActivity.this,"Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
