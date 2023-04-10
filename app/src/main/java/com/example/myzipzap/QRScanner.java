@@ -22,6 +22,9 @@ import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.UUID;
 
 // implements onClickListener for the onclick behaviour of button
@@ -87,11 +90,17 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
 
                 idText.setText(userId);
                 emailText.setText(email);
-                balText.setText(content);
+
+                if (balance != 0) {
+                    // increment the value
+                    Double newValue = balance - 2.00;
+                    balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
+                    databaseReference.child("Balance").setValue(newValue);
+                }
                 messageFormat.setText(intentResult.getFormatName());
 
 
-                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Double currentValue = snapshot.getValue(Double.class);
@@ -99,8 +108,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                             // increment the value
                             Double newValue = currentValue - 2.00;
                             // update the value in the database
-                            balText.setText(content+"\nNew Balance: "+currentValue);
-                            databaseReference.child(" New Balance").push().setValue(currentValue);
+                            balText.setText(content+"\nNew Balance: "+newValue);
+                            databaseReference.child("New Balance").push().setValue(newValue);
                         }
                     }
 
@@ -109,12 +118,26 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         // handle the error
                         Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
 
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private static JSONObject getBaseRequest() throws JSONException {
+        return new JSONObject().put("apiVersion", 2).put("apiVersionMinor", 0);
+    }
+
+    private static JSONObject getGatewayTokenizationSpecification() throws JSONException {
+        return new JSONObject() {{
+            put("type", "PAYMENT_GATEWAY");
+            put("parameter", new JSONObject() {{
+                put("gateway", "example");
+                put("gatewayMerchantId", "exampleGatewayMerchantId");
+            }});
+        }};
     }
 
 }

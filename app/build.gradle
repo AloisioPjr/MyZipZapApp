@@ -44,4 +44,5 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
     implementation 'com.google.firebase:firebase-database:16.0.6'
     implementation 'com.google.firebase:firebase-firestore:24.1.1'
+    implementation 'com.google.android.gms:play-services-wallet:19.1.0'
 }
