@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +27,11 @@ import java.util.UUID;
 // implements onClickListener for the onclick behaviour of button
 public class QRScanner extends AppCompatActivity implements View.OnClickListener {
     Button scanBtn;
-    TextView messageText, balText, messageFormat;
+    TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
 
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,9 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
         balText = findViewById(R.id.balContent);
+        idText = findViewById(R.id.idContent);
+        emailText = findViewById(R.id.textContent);
+        Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
         // adding listener to the button
         scanBtn.setOnClickListener(this);
@@ -65,25 +71,27 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // toast a message as "cancelled"
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Could not fetch QR data", Toast.LENGTH_SHORT).show();
             } else {
                 // if the intentResult is not null we'll set
                 // the content and format of scan message
-                String userId = UUID.randomUUID().toString();
+                String userId = currentUser.getUid();
                 String content = intentResult.getContents();
-                String name = "Juan";
+                String email = currentUser.getEmail();
+                double balance = 200.00;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 //databaseReference.setValue(intentResult.getContents());
                 databaseReference.child("User ID").push().setValue(userId);
-                databaseReference.child("Name").push().setValue(name);
-                databaseReference.child("Balance").push().setValue(content);
+                databaseReference.child("Email").push().setValue(email);
+                databaseReference.child("Balance").push().setValue(balance);
 
-
-                balText.setText(intentResult.getContents());
+                idText.setText(userId);
+                emailText.setText(email);
+                balText.setText(content);
                 messageFormat.setText(intentResult.getFormatName());
 
 
-                /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Double currentValue = snapshot.getValue(Double.class);
@@ -91,7 +99,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                             // increment the value
                             Double newValue = currentValue - 2.00;
                             // update the value in the database
-                            databaseReference.child("New Balance").push().setValue(content);
+                            balText.setText(content+"\nNew Balance: "+currentValue);
+                            databaseReference.child(" New Balance").push().setValue(currentValue);
                         }
                     }
 
@@ -100,7 +109,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         // handle the error
                         Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
 
             }
         } else {
