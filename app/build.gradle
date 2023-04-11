@@ -6,6 +6,9 @@ plugins {
 android {
     namespace 'com.example.myzipzap'
     compileSdk 33
+    buildFeatures.dataBinding = true
+    buildFeatures.viewBinding = true
+
 
     defaultConfig {
         applicationId "com.example.myzipzap"
@@ -28,6 +31,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
 
 dependencies {
 
