@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Scanner"
+        android:icon="@drawable/qr_code_scanner_icon"
+        android:id="@+id/qr_code_icon"/>
+
+    <item android:title="TupUp"
+        android:icon="@drawable/euro_symbol"
+        android:id="@+id/top_up_icon"/>
+
+    <item android:title="Bus "
+        android:icon="@drawable/bus_icon"
+        android:id="@+id/bus_icon" />
+
+    <item android:title="Settings"
+        android:icon="@drawable/settings_icon"
+        android:id="@+id/setting_icon"
+        />
+</menu>
