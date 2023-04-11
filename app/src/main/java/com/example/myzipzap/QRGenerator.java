@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.UUID;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
@@ -40,7 +42,8 @@ public class QRGenerator extends AppCompatActivity {
         qrImg = findViewById(R.id.qrImg);
         qrGenerate = findViewById(R.id.generate);
         scanner = findViewById(R.id.scanBtn);
-        userId = currentUser.getUid();
+        //userId = currentUser.getUid();
+        userId =("ID: "+ UUID.randomUUID());
 
 
         qrGenerate.setOnClickListener(new View.OnClickListener() {

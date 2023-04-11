@@ -33,6 +33,19 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
+    protected double balance;
+
+    public QRScanner () {
+        balance = 0;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -78,10 +91,9 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             } else {
                 // if the intentResult is not null we'll set
                 // the content and format of scan message
-                String userId = currentUser.getUid();
+                String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
                 String email = currentUser.getEmail();
-                double balance = 200.00;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 //databaseReference.setValue(intentResult.getContents());
                 databaseReference.child("User ID").push().setValue(userId);
@@ -96,6 +108,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                     Double newValue = balance - 2.00;
                     balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
                     databaseReference.child("Balance").setValue(newValue);
+                } else {
+                    balText.setText("No credit");
                 }
                 messageFormat.setText(intentResult.getFormatName());
 
@@ -124,20 +138,6 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-    private static JSONObject getBaseRequest() throws JSONException {
-        return new JSONObject().put("apiVersion", 2).put("apiVersionMinor", 0);
-    }
-
-    private static JSONObject getGatewayTokenizationSpecification() throws JSONException {
-        return new JSONObject() {{
-            put("type", "PAYMENT_GATEWAY");
-            put("parameter", new JSONObject() {{
-                put("gateway", "example");
-                put("gatewayMerchantId", "exampleGatewayMerchantId");
-            }});
-        }};
     }
 
 }
