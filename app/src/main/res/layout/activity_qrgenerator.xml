@@ -12,6 +12,7 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/balance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,8 +32,11 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="408dp"
         android:layout_height="59dp"
+        android:layout_marginTop="106dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="1dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/generate">
 
         <Button
             android:id="@+id/scanBtn"
@@ -45,12 +49,13 @@
         android:id="@+id/balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="48dp"
         android:ems="10"
         android:hint="Balance:"
         android:inputType="number"
         app:layout_constraintBottom_toTopOf="@+id/generate"
         app:layout_constraintEnd_toEndOf="@+id/qrImg"
+        app:layout_constraintHorizontal_bias="0.488"
         app:layout_constraintStart_toStartOf="@+id/qrImg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

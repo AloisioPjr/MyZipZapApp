@@ -65,8 +65,7 @@
         android:id="@+id/loginBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:paddingBottom="20dp"/>
+        android:text="Login"/>
     <TextView
         android:paddingTop="20dp"
         android:layout_width="wrap_content"

@@ -16,6 +16,6 @@
 
     <item android:title="Settings"
         android:icon="@drawable/settings_icon"
-        android:id="@+id/setting_icon"
+        android:id="@+id/settings_icon"
         />
 </menu>

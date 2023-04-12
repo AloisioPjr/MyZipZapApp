@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.myzipzap.databinding.ActivityMainBinding;
+
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -20,11 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-    BottomNavigationView bottomNavigationView;
-    SettingsFragment settingsFragment = new SettingsFragment();
-    BusTimeFragment busTimeFragment = new BusTimeFragment();
-    TopUpFragment topUpFragment = new TopUpFragment();
-    ScannerFragment scannerFragment = new ScannerFragment();
+    //BottomNavigationView bottomNavigationView;
+
     private FirebaseAuth mAuth;
     Button scanner;
     @Override
@@ -35,15 +32,12 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();// initialize the firebase authentication method
         startActivity((new Intent(MainActivity.this, QRScanner.class)));
 
-        // = findViewById(R.id.scanBtn);
+        //scanner = findViewById(R.id.scanBtn);
 
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        //bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, scannerFragment).commit();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, scannerFragment).commit();
-        BadgeDrawable badgeDrawable = bottomNavigationView.getOrCreateBadge(R.id.setting_icon);
-        badgeDrawable.setVisible(true);
-        badgeDrawable.setNumber(8);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+      /*  bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 switch(item.getItemId()) {
@@ -59,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, busTimeFragment).commit();
                         return true;
 
-                    case R.id.setting_icon:
+                    case R.id.settings_icon:
                         getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, settingsFragment).commit();
                         return true;
 
@@ -68,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        //////////////////////////////////////////////////
+       */
       /*  scanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

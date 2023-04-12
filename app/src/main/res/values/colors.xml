@@ -3,4 +3,11 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lavender">#8692f7</color>
+    <color name="platinum">#ccdbdc</color>
+    <color name="superLightBlue">#9ad1d4</color>
+    <color name="lightBlue">#80ced7</color>
+    <color name="ceruleanPool">#007ea7</color>
+    <color name="prussianSea">#003249</color>
+    <color name="grey">#808080</color>
 </resources>

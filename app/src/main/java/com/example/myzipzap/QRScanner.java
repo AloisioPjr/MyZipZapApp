@@ -2,6 +2,7 @@ package com.example.myzipzap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +31,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     TextView messageText, balText, messageFormat;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
-
+    BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,10 +43,41 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
         balText = findViewById(R.id.balContent);
-
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.qr_code_icon);
         // adding listener to the button
         scanBtn.setOnClickListener(this);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch(item.getItemId()) {
 
+                    case R.id.qr_code_icon:
+
+                        return true;
+
+                    case R.id.top_up_icon:
+                        startActivity(new Intent(getApplicationContext(), TopUpActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
+                    case R.id.bus_icon:
+                        startActivity(new Intent(getApplicationContext(), BusTimeActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
+
+                    case R.id.settings_icon:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
+
+
+                }
+                return false;
+            }
+        });
     }
 
     @Override
