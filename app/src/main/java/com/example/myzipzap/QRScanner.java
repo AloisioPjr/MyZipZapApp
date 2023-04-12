@@ -29,23 +29,11 @@ import java.util.UUID;
 
 // implements onClickListener for the onclick behaviour of button
 public class QRScanner extends AppCompatActivity implements View.OnClickListener {
-    Button scanBtn;
+    Button scanBtn, credBtn;
     TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
-    protected double balance;
-
-    public QRScanner () {
-        balance = 0;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+    public static double balance = 0;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -56,6 +44,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // referencing and initializing
         // the button and textviews
         scanBtn = findViewById(R.id.scanBtn);
+        credBtn = findViewById(R.id.creditBtn);
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
         balText = findViewById(R.id.balContent);
@@ -65,6 +54,13 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
 
         // adding listener to the button
         scanBtn.setOnClickListener(this);
+
+        credBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity((new Intent(QRScanner.this, GooglePay.class)));
+            }
+        });
 
     }
 
