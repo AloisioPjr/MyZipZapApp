@@ -25,7 +25,7 @@ public class CheckoutActivity extends AppCompatActivity {
     private static final long SHIPPING_COST_CENTS = 90 * PaymentInfo.CENTS_IN_A_UNIT.longValue();
     private PaymentsClient paymentsClient;
     View googlePayButton;
-    private CheckoutActivityBinding binding;
+    private CheckoutActivityBinding layoutBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
