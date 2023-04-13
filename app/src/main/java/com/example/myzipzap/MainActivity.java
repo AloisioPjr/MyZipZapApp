@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 
 import com.google.android.material.badge.BadgeDrawable;
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     //BottomNavigationView bottomNavigationView;
 
     private FirebaseAuth mAuth;
-    Button scanner;
+    Button scanner, generator;
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,45 +35,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity((new Intent(MainActivity.this, QRScanner.class)));
 
         //scanner = findViewById(R.id.scanBtn);
+        scanner = findViewById(R.id.scanBtn);
+        generator = findViewById(R.id.genBtn);
+        Toast.makeText(this, "ID: "+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
-        //bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, scannerFragment).commit();
-
-      /*  bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.qr_code_icon:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, scannerFragment).commit();
-                        return true;
-
-                    case R.id.top_up_icon:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, topUpFragment).commit();
-                        return true;
-
-                    case R.id.bus_icon:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, busTimeFragment).commit();
-                        return true;
-
-                    case R.id.settings_icon:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout, settingsFragment).commit();
-                        return true;
-
-
-                }
-                return false;
-            }
-        });
-        //////////////////////////////////////////////////
-       */
-      /*  scanner.setOnClickListener(new View.OnClickListener() {
+        scanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity((new Intent(MainActivity.this, QRScanner.class)));
             }
-        });*/
-    }
+        });
 
+        generator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity((new Intent(MainActivity.this, QRGenerator.class)));
+            }
+        });
+    }
     @Override
     protected void onStart() {
         super.onStart();

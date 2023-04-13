@@ -15,16 +15,23 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.UUID;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 public class QRGenerator extends AppCompatActivity {
 
     ImageView qrImg;
-    EditText balBox;
+
     Button qrGenerate, scanner;
     QRGEncoder qrgEncoder;
     Bitmap bitmap;
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    String userId;
 
 
 
@@ -33,16 +40,17 @@ public class QRGenerator extends AppCompatActivity {
         setContentView(R.layout.activity_qrgenerator);
 
         qrImg = findViewById(R.id.qrImg);
-        balBox = findViewById(R.id.balance);
         qrGenerate = findViewById(R.id.generate);
         scanner = findViewById(R.id.scanBtn);
+        //userId = currentUser.getUid();
+        userId =("ID: "+ UUID.randomUUID());
 
 
         qrGenerate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(balBox.getText().toString())) {
-                    Toast.makeText(QRGenerator.this, "Enter some text", Toast.LENGTH_SHORT).show();
+                if(currentUser == null) {
+                    Toast.makeText(QRGenerator.this, "Could not access User ID", Toast.LENGTH_SHORT).show();
                 }else{
                     WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
                     Display display = manager.getDefaultDisplay();
@@ -56,7 +64,7 @@ public class QRGenerator extends AppCompatActivity {
                     int dim = width < height ? width : height;
                     dim = dim * 3/4;
 
-                    qrgEncoder = new QRGEncoder("€ "+ balBox.getText().toString(), null, QRGContents.Type.TEXT, dim);
+                    qrgEncoder = new QRGEncoder("ID "+ userId, null, QRGContents.Type.TEXT, dim);
 
 
                     try {

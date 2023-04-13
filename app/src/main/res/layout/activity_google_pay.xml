@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".GooglePay"
+    android:text="Top Up">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
+
+        <RadioButton
+            android:id="@+id/rad5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="€5" />
+        <RadioButton
+            android:id="@+id/rad10"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="€10" />
+        <RadioButton
+            android:id="@+id/rad15"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="€15" />
+        <RadioButton
+            android:id="@+id/rad20"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="€20" />
+
+
+
+
+        <!--
+            TODO Check out Google Pay's brand guidelines to discover all button types and styles:
+            https://developers.google.com/pay/api/android/guides/brand-guidelines#assets
+        -->
+        <include
+            android:id="@+id/googlePayButton"
+            layout="@layout/buy_with_googlepay_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/buy_button_height"
+            android:layout_marginBottom="20dp"
+            android:visibility="gone"/>
+
+
+
+    </LinearLayout>
+</ScrollView>
