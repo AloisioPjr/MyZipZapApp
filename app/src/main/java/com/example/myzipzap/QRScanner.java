@@ -129,8 +129,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // of IntentIntegrator class
         // which is the class of QR library
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setPrompt("Scan a QR Code");
-        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setPrompt("Scan a barcode or QR Code");
+        intentIntegrator.setOrientationLocked(false);
         intentIntegrator.initiateScan();
     }
 
@@ -152,7 +152,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 balance = balance/100;
                 long newValue;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
-                //databaseReference.setValue(intentResult.getContents());
+                databaseReference.setValue(intentResult.getContents());
                 databaseReference.child("User ID").setValue(userId);
                 databaseReference.child("Email").setValue(email);
                 databaseReference.child("Balance").setValue(balance);
@@ -160,7 +160,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 idText.setText(userId);
                 emailText.setText(email);
 
-                if (balance != 2) {
+                if (balance != 0) {
                     // increment the value
                     newValue = (long) (balance - 2.00);
                     balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
@@ -170,27 +170,6 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                     balText.setText("No credit");
                 }
                 messageFormat.setText(intentResult.getFormatName());
-
-
-                /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Double currentValue = snapshot.getValue(Double.class);
-                        if (currentValue != null) {
-                            // increment the value
-                            Double newValue = currentValue - 2.00;
-                            // update the value in the database
-                            balText.setText(content+"\nNew Balance: "+newValue);
-                            databaseReference.child("New Balance").push().setValue(newValue);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // handle the error
-                        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
 
             }
         } else {

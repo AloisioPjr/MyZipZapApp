@@ -71,7 +71,9 @@ public class GooglePay extends AppCompatActivity {
         switch(item.getItemId()) {
 
           case R.id.qr_code_icon:
-
+            startActivity(new Intent(getApplicationContext(), QRScanner.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
             return true;
 
           case R.id.top_up_icon:

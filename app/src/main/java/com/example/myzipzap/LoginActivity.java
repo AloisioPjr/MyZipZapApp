@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginProgressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()){
                         Toast.makeText(LoginActivity.this,"Login successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, QRScanner.class));
                     }else {
                         Toast.makeText(LoginActivity.this, "Login error error: " + (task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }

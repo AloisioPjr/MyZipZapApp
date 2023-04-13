@@ -29,7 +29,7 @@ public class BusTimeActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.top_up_icon:
-                        startActivity(new Intent(getApplicationContext(), TopUpActivity.class));
+                        startActivity(new Intent(getApplicationContext(), GooglePay.class));
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                         return true;

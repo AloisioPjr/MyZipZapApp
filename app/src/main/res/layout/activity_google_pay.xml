@@ -60,6 +60,7 @@
             android:layout_height="@dimen/buy_button_height"
             android:layout_marginBottom="20dp"
             android:visibility="gone"/>
+    </LinearLayout>
 </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
