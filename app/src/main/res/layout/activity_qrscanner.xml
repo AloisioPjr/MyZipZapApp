@@ -65,4 +65,10 @@
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@android:color/transparent"
         />
+
+    <Button
+        android:id="@+id/creditBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="credit button" />
 </RelativeLayout>

@@ -78,7 +78,7 @@ public class Register extends AppCompatActivity {
 
                         FirebaseUser firebaseUser = mAuth.getCurrentUser();
                         //create the data in the realtime database
-                        ReadWriteUserDetails readWriteUserDetails = new ReadWriteUserDetails(userCredit);
+
                         //extracting user reference from Realtime database
                         DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("userCredit");
                         //save the details from user in the object writeUserDetails

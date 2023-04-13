@@ -3,6 +3,7 @@ package com.example.myzipzap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -10,19 +11,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.myzipzap.databinding.ActivityGooglePayBinding;
+import com.example.myzipzap.viewmodel.CheckoutViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wallet.AutoResolveHelper;
 import com.google.android.gms.wallet.PaymentData;
-
-import com.example.myzipzap.R;
-import com.example.myzipzap.viewmodel.CheckoutViewModel;
-
-import java.util.Locale;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import com.example.myzipzap.databinding.ActivityGooglePayBinding;
+
+import java.util.Locale;
 
 /**
  * Checkout implementation for the app
@@ -37,7 +38,7 @@ public class GooglePay extends AppCompatActivity {
   private ActivityGooglePayBinding layoutBinding;
   private View googlePayButton;
   long dummyPriceCents;
-
+  BottomNavigationView bottomNavigationView;
 
   /**
    * Initialize the Google Pay API on creation of the activity
@@ -51,6 +52,39 @@ public class GooglePay extends AppCompatActivity {
 
     model = new ViewModelProvider(this).get(CheckoutViewModel.class);
     model.canUseGooglePay.observe(this, this::setGooglePayAvailable);
+    bottomNavigationView = findViewById(R.id.bottomNavigationView);
+    bottomNavigationView.setSelectedItemId(R.id.top_up_icon);
+    bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+      @Override
+      public boolean onNavigationItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+
+          case R.id.qr_code_icon:
+
+            return true;
+
+          case R.id.top_up_icon:
+            startActivity(new Intent(getApplicationContext(), GooglePay.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
+            return true;
+          case R.id.bus_icon:
+            startActivity(new Intent(getApplicationContext(), BusTimeActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
+            return true;
+
+          case R.id.settings_icon:
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
+            return true;
+
+
+        }
+        return false;
+      }
+    });
   }
 
   private void initializeUi() {

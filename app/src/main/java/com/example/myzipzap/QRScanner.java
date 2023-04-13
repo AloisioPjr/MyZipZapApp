@@ -36,15 +36,14 @@ import java.util.UUID;
 // implements onClickListener for the onclick behaviour of button
 public class QRScanner extends AppCompatActivity implements View.OnClickListener {
     FirebaseAuth mAuth;
-    Button scanBtn;
-    TextView messageText, balText, messageFormat;
+
     Button scanBtn, credBtn;
     TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
     BottomNavigationView bottomNavigationView;
     private String userId;
-    private String userCredit;
+    private String userBalance;
     public static double balance = 0;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -66,15 +65,15 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
 
 
         balText.setText((CharSequence) databaseReference);
-        userCredit = "300000.00";
+        userBalance = "300000.00";
 
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("userCredit");
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("userBalance");
         idText = findViewById(R.id.idContent);
         emailText = findViewById(R.id.textContent);
         Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
         HashMap userHashmap = new HashMap();
-        userHashmap.put("userCredit"+(FirebaseAuth.getInstance().getCurrentUser().getUid()),userCredit);
+        userHashmap.put("userBalance"+(FirebaseAuth.getInstance().getCurrentUser().getUid()),userBalance);
 
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).updateChildren(userHashmap);
         // adding listener to the button
@@ -89,7 +88,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         return true;
 
                     case R.id.top_up_icon:
-                        startActivity(new Intent(getApplicationContext(), TopUpActivity.class));
+                        startActivity(new Intent(getApplicationContext(), GooglePay.class));
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                         return true;
