@@ -38,6 +38,7 @@ public class GooglePay extends AppCompatActivity {
   private View googlePayButton;
   long dummyPriceCents;
 
+
   /**
    * Initialize the Google Pay API on creation of the activity
    *
@@ -86,7 +87,8 @@ public class GooglePay extends AppCompatActivity {
 
     // The price provided to the API should include taxes and shipping.
     // This price is not displayed to the user.
-    dummyPriceCents = 50;
+
+    dummyPriceCents = 500;
     long totalPriceCents = dummyPriceCents;
     final Task<PaymentData> task = model.getLoadPaymentDataTask(totalPriceCents);
 

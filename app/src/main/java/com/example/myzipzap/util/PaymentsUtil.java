@@ -238,7 +238,7 @@ public class PaymentsUtil {
 
       /* An optional shipping address requirement is a top-level property of the PaymentDataRequest
       JSON object. */
-      paymentDataRequest.put("shippingAddressRequired", true);
+      paymentDataRequest.put("shippingAddressRequired", false);
 
       JSONObject shippingAddressParameters = new JSONObject();
       shippingAddressParameters.put("phoneNumberRequired", false);
