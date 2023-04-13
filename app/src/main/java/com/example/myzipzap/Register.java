@@ -30,7 +30,7 @@ public class Register extends AppCompatActivity {
     TextInputEditText registerEmailET,registerPasswordET;
     TextView loginHereTV;
     ProgressBar registerProgressBar;
-    private String userCredit;
+    private String userBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class Register extends AppCompatActivity {
 
 
 
-        userCredit = "0.00";
+        userBalance = "0.00";
         registerBtn.setOnClickListener(view -> {
             createUser();
         });
@@ -80,14 +80,14 @@ public class Register extends AppCompatActivity {
                         //create the data in the realtime database
 
                         //extracting user reference from Realtime database
-                        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("userCredit");
+                        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("userBalance");
                         //save the details from user in the object writeUserDetails
 
-                        referenceProfile.child(firebaseUser.getUid()).setValue(userCredit).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        referenceProfile.child(firebaseUser.getUid()).setValue(userBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override// this on complete will only save the data if the first onComplete has been successful
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                    firebaseUser.sendEmailVerification();
+                                    //firebaseUser.sendEmailVerification();
                                     Toast.makeText(Register.this, "An email confirmation has been sent, please check your email", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(Register.this, LoginActivity.class));
                                 }else{

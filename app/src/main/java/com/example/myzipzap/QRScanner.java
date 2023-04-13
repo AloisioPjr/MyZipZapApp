@@ -51,26 +51,26 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscanner);
-
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.qr_code_icon);
         // referencing and initializing
         // the button and textviews
         mAuth = FirebaseAuth.getInstance();
         scanBtn = findViewById(R.id.scanBtn);
-        credBtn = findViewById(R.id.creditBtn);
+
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
         balText = findViewById(R.id.balContent);
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.qr_code_icon);
-
-
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        userId = firebaseUser.getUid();
         balText.setText((CharSequence) databaseReference);
         userBalance = "300000.00";
 
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("userBalance");
+        databaseReference = FirebaseDatabase.getInstance().getReference("userBalance");
+       // balance = databaseReference.child((FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue());
         idText = findViewById(R.id.idContent);
         emailText = findViewById(R.id.textContent);
-        Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
+
 
         HashMap userHashmap = new HashMap();
         userHashmap.put("userBalance"+(FirebaseAuth.getInstance().getCurrentUser().getUid()),userBalance);
@@ -109,12 +109,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 return false;
             }
         });
-        credBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity((new Intent(QRScanner.this, GooglePay.class)));
-            }
-        });
+
 
     }
 
@@ -124,8 +119,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // of IntentIntegrator class
         // which is the class of QR library
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
-        intentIntegrator.setOrientationLocked(false);
+        intentIntegrator.setPrompt("Scan a QR Code");
+        intentIntegrator.setOrientationLocked(true);
         intentIntegrator.initiateScan();
     }
 
@@ -141,22 +136,23 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             } else {
                 // if the intentResult is not null we'll set
                 // the content and format of scan message
-                //String userId = UUID.randomUUID().toString();
+                String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
-                //String name = "Juan";
+                String email = currentUser.getEmail();
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 //databaseReference.setValue(intentResult.getContents());
-                //databaseReference.child("Name").push().setValue(name);
-                databaseReference.child("Balance").push().setValue(content);
+                databaseReference.child("User ID").push().setValue(userId);
+                databaseReference.child("Email").push().setValue(email);
+                databaseReference.child("Balance").push().setValue(balance);
 
                 idText.setText(userId);
-               //emailText.setText(email);
+                //emailText.setText(email);
 
-                if (balance != 0) {
+                if (balance > 2) {
                     // increment the value
                     Double newValue = balance - 2.00;
                     balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
-                    databaseReference.child("Balance").setValue(newValue);
+                    databaseReference.child("userBalance").setValue(newValue);
                 } else {
                     balText.setText("No credit");
                 }

@@ -49,7 +49,8 @@
         android:layout_height="178dp"
         android:layout_centerInParent="true"
         android:background="@drawable/qr_code_scanner_icon"
-        android:backgroundTint="@color/ceruleanPool" />
+        android:backgroundTint="@color/ceruleanPool"
+        android:text="Scan"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
@@ -66,9 +67,5 @@
         app:itemRippleColor="@android:color/transparent"
         />
 
-    <Button
-        android:id="@+id/creditBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="credit button" />
+
 </RelativeLayout>
