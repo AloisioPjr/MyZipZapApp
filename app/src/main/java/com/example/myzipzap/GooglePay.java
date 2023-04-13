@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -37,6 +39,8 @@ public class GooglePay extends AppCompatActivity {
   private ActivityGooglePayBinding layoutBinding;
   private View googlePayButton;
   long dummyPriceCents;
+  RadioGroup radGroup;
+  RadioButton radBtn5, radBtn10, radBtn15, radBtn20;
 
 
   /**
@@ -51,6 +55,12 @@ public class GooglePay extends AppCompatActivity {
 
     model = new ViewModelProvider(this).get(CheckoutViewModel.class);
     model.canUseGooglePay.observe(this, this::setGooglePayAvailable);
+    dummyPriceCents = QRScanner.balance;
+    radGroup = findViewById(R.id.radioGroup);
+    radBtn5 = findViewById(R.id.rad5);
+    radBtn10 = findViewById(R.id.rad10);
+    radBtn15 = findViewById(R.id.rad15);
+    radBtn20 = findViewById(R.id.rad20);
   }
 
   private void initializeUi() {
@@ -87,8 +97,16 @@ public class GooglePay extends AppCompatActivity {
 
     // The price provided to the API should include taxes and shipping.
     // This price is not displayed to the user.
+    if(radBtn5.isChecked()) {
+      dummyPriceCents = 500;
+    } else if(radBtn10.isChecked()) {
+      dummyPriceCents = 1000;
+    } else if(radBtn15.isChecked()) {
+      dummyPriceCents = 1500;
+    } else if(radBtn20.isChecked()) {
+      dummyPriceCents = 2000;
+    }
 
-    dummyPriceCents = 500;
     long totalPriceCents = dummyPriceCents;
     final Task<PaymentData> task = model.getLoadPaymentDataTask(totalPriceCents);
 
