@@ -18,7 +18,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/bottomNavigationView"
         android:background="@drawable/bottom_background"
         app:itemTextColor="@color/white"

@@ -3,19 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Scanner"
-        android:icon="@drawable/qr_code_scanner_icon"
+        android:icon="@drawable/baseline_qr_code_scanner_24"
         android:id="@+id/qr_code_icon"/>
 
     <item android:title="TupUp"
-        android:icon="@drawable/euro_symbol"
+        android:icon="@drawable/baseline_euro_24"
         android:id="@+id/top_up_icon"/>
 
     <item android:title="Bus "
-        android:icon="@drawable/bus_icon"
+        android:icon="@drawable/baseline_directions_bus_24"
         android:id="@+id/bus_icon" />
 
     <item android:title="Settings"
-        android:icon="@drawable/settings_icon"
+        android:icon="@drawable/baseline_settings_24"
         android:id="@+id/settings_icon"
         />
 </menu>

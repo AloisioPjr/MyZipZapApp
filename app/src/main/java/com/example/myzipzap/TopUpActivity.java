@@ -20,6 +20,7 @@ public class TopUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_top_up);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.top_up_icon);
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
