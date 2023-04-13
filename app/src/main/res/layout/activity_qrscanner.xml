@@ -7,7 +7,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".QRScanner">
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/zipzaplogo"
+        android:layout_above="@+id/idContent"/>
     <TextView
         android:id="@+id/idContent"
         android:layout_width="wrap_content"
@@ -45,12 +49,12 @@
 
     <Button
         android:id="@+id/scanBtn"
-        android:layout_width="144dp"
-        android:layout_height="178dp"
+        android:layout_width="60dp"
+        android:layout_height="62dp"
         android:layout_centerInParent="true"
         android:background="@drawable/qr_code_scanner_icon"
         android:backgroundTint="@color/ceruleanPool"
-        android:text="Scan"/>
+        android:text="Scan" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

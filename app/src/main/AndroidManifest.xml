@@ -12,20 +12,21 @@
         android:icon="@mipmap/zz_icon_round"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Material3.Light"
+        android:theme="@style/Theme.myZipZap"
         tools:targetApi="31">
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:label="Settings"/>
         <activity
             android:name=".BusTimeActivity"
-            android:exported="false" />
-
+            android:label="Bus Time"
+            android:exported="false"/>
 
         <activity
             android:name=".QRScanner"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:label="QR Scanner">
 
             <meta-data
                 android:name="android.app.lib_name"
@@ -34,7 +35,8 @@
         <activity
             android:name=".QRGenerator"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:label="QR Generator"
+            android:theme="@style/Theme.myZipZap">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -43,7 +45,7 @@
         <activity
             android:name=".Register"
             android:exported="false"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.myZipZap.noActionBar">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -51,7 +53,7 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.Light.NoActionBar">
+            android:theme="@style/Theme.myZipZap.noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -68,7 +70,7 @@
             android:name=".GooglePay"
             android:exported="false"
             android:label="@string/title_activity_google_pay"
-            android:theme="@style/Theme.Material3.Light" />
+            android:theme="@style/Theme.myZipZap"/>
 
         <meta-data
             android:name="com.google.android.gms.wallet.api.enabled"
