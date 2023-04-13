@@ -1,5 +1,7 @@
 package com.example.myzipzap;
 
+import static com.example.myzipzap.util.PaymentsUtil.CENTS_IN_A_UNIT;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +18,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.myzipzap.util.PaymentsUtil;
+import com.example.myzipzap.viewmodel.CheckoutViewModel;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wallet.PaymentData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +37,8 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 // implements onClickListener for the onclick behaviour of button
@@ -44,7 +52,9 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     BottomNavigationView bottomNavigationView;
     private String userId;
     private String userBalance;
-    public static double balance = 0;
+
+    public static long balance;
+    private PaymentsUtil converter;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -139,20 +149,23 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
                 String email = currentUser.getEmail();
+                balance = balance/100;
+                long newValue;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 //databaseReference.setValue(intentResult.getContents());
-                databaseReference.child("User ID").push().setValue(userId);
-                databaseReference.child("Email").push().setValue(email);
-                databaseReference.child("Balance").push().setValue(balance);
+                databaseReference.child("User ID").setValue(userId);
+                databaseReference.child("Email").setValue(email);
+                databaseReference.child("Balance").setValue(balance);
 
                 idText.setText(userId);
-                //emailText.setText(email);
+                emailText.setText(email);
 
-                if (balance > 2) {
+                if (balance != 2) {
                     // increment the value
-                    Double newValue = balance - 2.00;
+                    newValue = (long) (balance - 2.00);
                     balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
-                    databaseReference.child("userBalance").setValue(newValue);
+                    databaseReference.child("Balance").setValue(newValue);
+                    balance = newValue;
                 } else {
                     balText.setText("No credit");
                 }
@@ -167,7 +180,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                             // increment the value
                             Double newValue = currentValue - 2.00;
                             // update the value in the database
-                            databaseReference.child("New Balance").push().setValue(content);
+                            balText.setText(content+"\nNew Balance: "+newValue);
+                            databaseReference.child("New Balance").push().setValue(newValue);
                         }
                     }
 
