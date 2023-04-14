@@ -8,12 +8,14 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/zipzaplogo"/>
+        android:src="@drawable/zipzap_logo_1__5_"/>
+
     <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/frame_layout"
-        android:layout_above="@id/bottomNavigationView"/>
+        android:layout_width="398dp"
+        android:layout_height="287dp"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_marginBottom="250dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

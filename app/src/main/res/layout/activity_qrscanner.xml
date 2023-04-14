@@ -7,54 +7,95 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".QRScanner">
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/zipzaplogo"
-        android:layout_above="@+id/idContent"/>
+        android:layout_width="match_parent"
+        android:layout_height="229dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/zipZapLogo"
+        android:src="@drawable/zipzap_logo_1__5_" />
+    <androidx.cardview.widget.CardView
+        android:outlineAmbientShadowColor="@color/black"
+        android:outlineSpotShadowColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/zipZapLogo"
+        android:backgroundTint="@color/platinum"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="20dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="left">
     <TextView
         android:id="@+id/idContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_margin="10dp"
         android:layout_above="@+id/textContent"
-        android:text="ID" />
+        android:layout_gravity="left"
+        android:text="ID"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:textSize="20sp"
         android:layout_margin="10dp"
+        android:layout_gravity="left"
         android:layout_above="@+id/balContent"
-        android:text="Name" />
+        android:text="Name"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/balContent"
         android:text="Balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="left"
+        android:textSize="20sp"
         android:layout_above="@+id/textFormat"
-        android:layout_margin="10dp"/>
+        android:layout_margin="10dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/textFormat"
-        android:text="messageFormat"
+        android:text="Message Format"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:textSize="20sp"
+        android:layout_margin="10dp"
+        android:layout_above="@+id/scanBtn"
+        android:textStyle="bold"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-        android:layout_above="@+id/scanBtn"/>
-
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scanBtn"
-        android:layout_width="60dp"
-        android:layout_height="62dp"
+        android:layout_width="75dp"
+        android:layout_height="95dp"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_alignParentEnd="true"
+
         android:layout_centerInParent="true"
-        android:background="@drawable/qr_code_scanner_icon"
-        android:backgroundTint="@color/ceruleanPool"
-        android:text="Scan" />
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="20dp"
+
+        android:backgroundTint="@color/platinum"
+        android:clickable="true"
+        android:contentDescription="Scan"
+        android:focusable="true"
+        android:foregroundGravity="center"
+        app:fabCustomSize="61dp"
+        app:srcCompat="@drawable/qr_code_scanner_icon" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"

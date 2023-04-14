@@ -7,14 +7,20 @@
     android:fillViewport="true"
     tools:context=".GooglePay"
     android:text="Top Up">
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/zipzaplogo"/>
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/zipzap_logo_1__5_"
+        android:id="@+id/zipZapLogo"/>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/frame_layout"
+        android:layout_marginBottom="20dp"
         android:layout_above="@id/bottomNavigationView">
 
     <LinearLayout
@@ -22,7 +28,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="0dp">
 
         <RadioGroup
             android:id="@+id/radioGroup"
@@ -33,21 +40,26 @@
                 android:id="@+id/rad5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="45dp"
                 android:text="€5" />
+
             <RadioButton
                 android:id="@+id/rad10"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="45dp"
                 android:text="€10" />
             <RadioButton
                 android:id="@+id/rad15"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="45dp"
                 android:text="€15" />
             <RadioButton
                 android:id="@+id/rad20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="45dp"
                 android:text="€20" />
         </RadioGroup>
 
@@ -64,7 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/buy_button_height"
             android:layout_marginBottom="20dp"
-            android:visibility="gone"/>
+            android:layout_marginTop="25dp"
+            />
     </LinearLayout>
 </FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView

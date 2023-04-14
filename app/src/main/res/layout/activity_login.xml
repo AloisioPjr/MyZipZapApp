@@ -6,24 +6,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="20dp"
+
     tools:context=".LoginActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/zipzaplogo"/>
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:src="@drawable/zipzap_logo_1__5_" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Login"
         android:textSize="30sp"
         android:textStyle="bold"
-        android:layout_marginBottom="25dp"
+        android:layout_marginBottom="2dp"
         />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginEmailET"
@@ -31,22 +33,26 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
+
             android:textSize="20sp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/loginPasswordET"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:layout_marginBottom="25dp"
-            android:textSize="20sp"
-            android:layout_marginTop="15dp"/>
+            android:textSize="20sp" />
     </com.google.android.material.textfield.TextInputLayout>
     <TextView
         android:layout_width="wrap_content"

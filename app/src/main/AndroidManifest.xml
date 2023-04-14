@@ -69,7 +69,7 @@
         <activity
             android:name=".GooglePay"
             android:exported="false"
-            android:label="@string/title_activity_google_pay"
+            android:label="@string/title_activity_top_up"
             android:theme="@style/Theme.myZipZap"/>
 
         <meta-data

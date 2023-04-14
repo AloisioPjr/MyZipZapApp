@@ -87,7 +87,7 @@ public class Register extends AppCompatActivity {
                             @Override// this on complete will only save the data if the first onComplete has been successful
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                    //firebaseUser.sendEmailVerification();
+                                    firebaseUser.sendEmailVerification();
                                     Toast.makeText(Register.this, "An email confirmation has been sent, please check your email", Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(Register.this, LoginActivity.class));
                                 }else{
