@@ -1,7 +1,10 @@
 package com.example.myzipzap;
 
+import static com.example.myzipzap.util.PaymentsUtil.CENTS_IN_A_UNIT;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -11,6 +14,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myzipzap.util.PaymentsUtil;
+import com.example.myzipzap.viewmodel.CheckoutViewModel;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.wallet.PaymentData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +32,8 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 // implements onClickListener for the onclick behaviour of button
@@ -33,7 +42,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
     DatabaseReference databaseReference;
-    public static double balance = 0;
+    public static long balance;
+    private PaymentsUtil converter;
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -50,6 +60,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         balText = findViewById(R.id.balContent);
         idText = findViewById(R.id.idContent);
         emailText = findViewById(R.id.textContent);
+        balance = 0;
         Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
         // adding listener to the button
@@ -83,44 +94,44 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // toast a message as "cancelled"
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(getBaseContext(), "Could not fetch QR data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
                 // if the intentResult is not null we'll set
                 // the content and format of scan message
                 String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
                 String email = currentUser.getEmail();
+                long newValue;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 //databaseReference.setValue(intentResult.getContents());
-                databaseReference.child("User ID").push().setValue(userId);
-                databaseReference.child("Email").push().setValue(email);
-                databaseReference.child("Balance").push().setValue(balance);
+                databaseReference.child("User ID").setValue(userId);
+                databaseReference.child("Email").setValue(email);
+                databaseReference.child("Balance").setValue(balance);
 
                 idText.setText(userId);
                 emailText.setText(email);
 
                 if (balance != 0) {
                     // increment the value
-                    Double newValue = balance - 2.00;
-                    balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
+                    newValue = (long) (balance - 200.00);
+                    balText.setText("Balance: €"+ String.valueOf(balance/100)+ "\nNew Balance: €"+ (newValue/100));
                     databaseReference.child("Balance").setValue(newValue);
+                    balance = newValue;
                 } else {
                     balText.setText("No credit");
                 }
                 messageFormat.setText(intentResult.getFormatName());
 
 
-                /*databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Double currentValue = snapshot.getValue(Double.class);
-                        if (currentValue != null) {
-                            // increment the value
-                            Double newValue = currentValue - 2.00;
-                            // update the value in the database
-                            balText.setText(content+"\nNew Balance: "+newValue);
-                            databaseReference.child("New Balance").push().setValue(newValue);
-                        }
+                        String dbCredit = snapshot.child("Balance").getValue().toString();
+                        Log.d("FB credit", dbCredit);
+                        long newCredit = (long)snapshot.child("Balance").getValue();
+                        balance = newCredit;
+
                     }
 
                     @Override
@@ -128,7 +139,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         // handle the error
                         Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
                     }
-                });*/
+                });
 
             }
         } else {
