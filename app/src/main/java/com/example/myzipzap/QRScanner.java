@@ -4,6 +4,7 @@ import static com.example.myzipzap.util.PaymentsUtil.CENTS_IN_A_UNIT;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -76,7 +77,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         userId = firebaseUser.getUid();
         balText.setText((CharSequence) databaseReference);
-        userBalance = "300000.00";
+        //userBalance = "300000.00";
+        balance = 0;
 
         databaseReference = FirebaseDatabase.getInstance().getReference("userBalance");
        // balance = databaseReference.child((FirebaseAuth.getInstance().getCurrentUser().getUid()).getValue());
@@ -151,10 +153,9 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
                 String email = currentUser.getEmail();
-                balance = balance/100;
                 long newValue;
                 databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.setValue(intentResult.getContents());
+                //databaseReference.setValue(intentResult.getContents());
                 databaseReference.child("User ID").setValue(userId);
                 databaseReference.child("Email").setValue(email);
                 databaseReference.child("Balance").setValue(balance);
@@ -164,14 +165,31 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
 
                 if (balance != 0) {
                     // increment the value
-                    newValue = (long) (balance - 2.00);
-                    balText.setText("Balance: "+ String.valueOf(balance)+ "\nNew Balance: "+ newValue);
+                    newValue = (long) (balance - 200.00);
+                    balText.setText("Balance: "+ String.valueOf(balance/100)+ "\nNew Balance: "+ (newValue/100));
                     databaseReference.child("Balance").setValue(newValue);
                     balance = newValue;
                 } else {
                     balText.setText("No credit");
                 }
                 messageFormat.setText(intentResult.getFormatName());
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String dbCredit = snapshot.child("Balance").getValue().toString();
+                        Log.d("FB credit", dbCredit);
+                        long newCredit = (long)snapshot.child("Balance").getValue();
+                        balance = newCredit;
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // handle the error
+                        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         } else {
