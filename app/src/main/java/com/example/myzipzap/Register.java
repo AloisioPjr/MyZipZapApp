@@ -18,9 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
@@ -30,7 +27,6 @@ public class Register extends AppCompatActivity {
     TextInputEditText registerEmailET,registerPasswordET;
     TextView loginHereTV;
     ProgressBar registerProgressBar;
-    private String userBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +38,7 @@ public class Register extends AppCompatActivity {
         registerPasswordET = findViewById(R.id.registerPasswordET);
         loginHereTV = findViewById(R.id.loginHereTV);
         registerProgressBar = findViewById(R.id.registerProgressBar);
-
-        //
-
-
-
-        userBalance = "0.00";
+        mAuth = FirebaseAuth.getInstance();
         registerBtn.setOnClickListener(view -> {
             createUser();
         });
@@ -76,28 +67,8 @@ public class Register extends AppCompatActivity {
                     registerProgressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
 
-                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                        //create the data in the realtime database
-
-                        //extracting user reference from Realtime database
-                        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("userBalance");
-                        //save the details from user in the object writeUserDetails
-
-                        referenceProfile.child(firebaseUser.getUid()).setValue(userBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override// this on complete will only save the data if the first onComplete has been successful
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    firebaseUser.sendEmailVerification();
-                                    Toast.makeText(Register.this, "An email confirmation has been sent, please check your email", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(Register.this, LoginActivity.class));
-                                }else{
-                                    Toast.makeText(Register.this, "registration error: " + (task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        });
-
-
+                        Toast.makeText(Register.this, "User registered successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Register.this, LoginActivity.class));
                     } else {
                         Toast.makeText(Register.this, "registration error: " + (task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
