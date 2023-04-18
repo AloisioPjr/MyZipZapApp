@@ -55,7 +55,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     BottomNavigationView bottomNavigationView;
     //private String userId;
     //private String userBalance;
-
+    String vehicleID;
     public static long balance;
     private PaymentsUtil converter;
 
@@ -70,7 +70,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // the button and textviews
         //mAuth = FirebaseAuth.getInstance();
         scanBtn = findViewById(R.id.scanBtn);
-
+        vehicleID = "38e43b50-de39-11ed-b5ea-0242ac120002";
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
         balText = findViewById(R.id.balContent);
@@ -132,7 +132,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         // of IntentIntegrator class
         // which is the class of QR library
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
+        intentIntegrator.setPrompt("Scan the QR Code");
         intentIntegrator.setOrientationLocked(false);
         intentIntegrator.initiateScan();
     }
@@ -147,51 +147,55 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             if (intentResult.getContents() == null) {
                 Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
             } else {
-                // if the intentResult is not null we'll set
-                // the content and format of scan message
-                String userId = ("ID: "+ UUID.randomUUID());
                 String content = intentResult.getContents();
-                String email = currentUser.getEmail();
-                long newValue;
-                databaseReference = FirebaseDatabase.getInstance().getReference();
-                //databaseReference.setValue(intentResult.getContents());
-                databaseReference.child("User ID").setValue(userId);
-                databaseReference.child("Email").setValue(email);
-                databaseReference.child("Balance").setValue(balance);
+                if (content.contentEquals(vehicleID)) {
+                    // if the intentResult is not null we'll set
+                    // the content and format of scan message
+                    String userId = ("ID: " + UUID.randomUUID());
 
-                idText.setText(userId);
-                emailText.setText(email);
+                    String email = currentUser.getEmail();
+                    long newValue;
+                    databaseReference = FirebaseDatabase.getInstance().getReference();
+                    //databaseReference.setValue(intentResult.getContents());
+                    databaseReference.child("User ID").setValue(userId);
+                    databaseReference.child("Email").setValue(email);
+                    databaseReference.child("Balance").setValue(balance);
 
-                if (balance != 0) {
-                    // increment the value
-                    newValue = (long) (balance - 200.00);
-                    balText.setText("Balance: €"+ String.valueOf(balance/100)+ "\nNew Balance: €"+ (newValue/100));
-                    databaseReference.child("Balance").setValue(newValue);
-                    balance = newValue;
-                } else {
-                    balText.setText("No credit");
+                    idText.setText(userId);
+                    emailText.setText(email);
+
+                    if (balance != 0) {
+                        // increment the value
+                        newValue = (long) (balance - 200.00);
+                        balText.setText("Balance: €" + String.valueOf(balance / 100) + "\nNew Balance: €" + (newValue / 100));
+                        databaseReference.child("Balance").setValue(newValue);
+                        balance = newValue;
+                    } else {
+                        balText.setText("No credit");
+                    }
+                    messageFormat.setText(intentResult.getFormatName());
+
+
+                    databaseReference.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            String dbCredit = snapshot.child("Balance").getValue().toString();
+                            Log.d("FB credit", dbCredit);
+                            long newCredit = (long) snapshot.child("Balance").getValue();
+                            balance = newCredit;
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // handle the error
+                            Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(getBaseContext(), "Please scan a valid QR code", Toast.LENGTH_SHORT).show();
                 }
-                messageFormat.setText(intentResult.getFormatName());
-
-
-
-                databaseReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String dbCredit = snapshot.child("Balance").getValue().toString();
-                        Log.d("FB credit", dbCredit);
-                        long newCredit = (long)snapshot.child("Balance").getValue();
-                        balance = newCredit;
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        // handle the error
-                        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

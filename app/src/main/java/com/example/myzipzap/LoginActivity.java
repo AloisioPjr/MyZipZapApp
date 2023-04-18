@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,"Login successful", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(LoginActivity.this, QRScanner.class));
                     }else {
-                        Toast.makeText(LoginActivity.this, "Login error error: " + (task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login error error: " + (task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             });
