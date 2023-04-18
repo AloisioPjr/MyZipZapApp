@@ -41,9 +41,10 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     Button scanBtn, credBtn;
     TextView messageText, balText, messageFormat, idText, emailText;
     FirebaseDatabase rootNode;
-    DatabaseReference databaseReference;
+    DatabaseReference databaseReference, ref;
     public static long balance;
     private PaymentsUtil converter;
+
 
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     @Override
@@ -61,7 +62,11 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         idText = findViewById(R.id.idContent);
         emailText = findViewById(R.id.textContent);
         balance = 0;
-        Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
+
+
+
+
+            //Toast.makeText(this, ""+ currentUser.getUid(), Toast.LENGTH_SHORT).show();
 
         // adding listener to the button
         scanBtn.setOnClickListener(this);
@@ -73,7 +78,9 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             }
         });
 
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -85,6 +92,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         intentIntegrator.setOrientationLocked(false);
         intentIntegrator.initiateScan();
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -102,7 +111,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 String content = intentResult.getContents();
                 String email = currentUser.getEmail();
                 long newValue;
-                databaseReference = FirebaseDatabase.getInstance().getReference();
+
                 //databaseReference.setValue(intentResult.getContents());
                 databaseReference.child("User ID").setValue(userId);
                 databaseReference.child("Email").setValue(email);
@@ -117,6 +126,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                     balText.setText("Balance: €"+ String.valueOf(balance/100)+ "\nNew Balance: €"+ (newValue/100));
                     databaseReference.child("Balance").setValue(newValue);
                     balance = newValue;
+
                 } else {
                     balText.setText("No credit");
                 }
@@ -130,7 +140,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         String dbCredit = snapshot.child("Balance").getValue().toString();
                         Log.d("FB credit", dbCredit);
                         long newCredit = (long)snapshot.child("Balance").getValue();
-                        balance = newCredit;
+                        balance += newCredit;
 
                     }
 

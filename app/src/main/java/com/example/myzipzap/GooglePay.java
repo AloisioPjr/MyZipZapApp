@@ -61,6 +61,7 @@ public class GooglePay extends AppCompatActivity {
     radBtn10 = findViewById(R.id.rad10);
     radBtn15 = findViewById(R.id.rad15);
     radBtn20 = findViewById(R.id.rad20);
+
   }
 
   private void initializeUi() {
@@ -93,7 +94,7 @@ public class GooglePay extends AppCompatActivity {
   public void requestPayment(View view) {
 
     // Disables the button to prevent multiple clicks.
-    googlePayButton.setClickable(false);
+    googlePayButton.setClickable(true);
 
     // The price provided to the API should include taxes and shipping.
     // This price is not displayed to the user.
@@ -105,6 +106,9 @@ public class GooglePay extends AppCompatActivity {
       dummyPriceCents = 1500;
     } else if(radBtn20.isChecked()) {
       dummyPriceCents = 2000;
+    } else {
+      Toast.makeText(this, "Please choose an amount", Toast.LENGTH_LONG).show();
+      startActivity((new Intent(GooglePay.this, GooglePay.class)));
     }
 
     long totalPriceCents = dummyPriceCents;
