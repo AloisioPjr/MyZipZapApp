@@ -113,6 +113,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 long newValue;
 
                 //databaseReference.setValue(intentResult.getContents());
+                databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child("User ID").setValue(userId);
                 databaseReference.child("Email").setValue(email);
                 databaseReference.child("Balance").setValue(balance);
@@ -140,7 +141,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                         String dbCredit = snapshot.child("Balance").getValue().toString();
                         Log.d("FB credit", dbCredit);
                         long newCredit = (long)snapshot.child("Balance").getValue();
-                        balance += newCredit;
+                        balance = newCredit;
 
                     }
 
