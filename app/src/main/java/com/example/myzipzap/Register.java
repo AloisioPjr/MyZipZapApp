@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
     FirebaseAuth mAuth;
@@ -27,6 +27,7 @@ public class Register extends AppCompatActivity {
     TextInputEditText registerEmailET,registerPasswordET;
     TextView loginHereTV;
     ProgressBar registerProgressBar;
+    private long userBalance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,12 @@ public class Register extends AppCompatActivity {
         registerPasswordET = findViewById(R.id.registerPasswordET);
         loginHereTV = findViewById(R.id.loginHereTV);
         registerProgressBar = findViewById(R.id.registerProgressBar);
-        mAuth = FirebaseAuth.getInstance();
+
+        //
+
+
+
+        userBalance = 0;
         registerBtn.setOnClickListener(view -> {
             createUser();
         });
@@ -67,10 +73,30 @@ public class Register extends AppCompatActivity {
                     registerProgressBar.setVisibility(View.GONE);
                     if (task.isSuccessful()) {
 
-                        Toast.makeText(Register.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(Register.this, LoginActivity.class));
+                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                        //create the data in the realtime database
+                        //extracting user reference from Realtime database
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+                        //save the details from user in the object writeUserDetails
+
+                        databaseReference.child(firebaseUser.getUid()).child("User Balance").setValue(userBalance).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override// this on complete will only save the data if the first onComplete has been successful
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    firebaseUser.sendEmailVerification();
+                                    Toast.makeText(Register.this, "A confirmation email has been sent, please check your email", Toast.LENGTH_LONG).show();
+
+                                    startActivity(new Intent(Register.this, LoginActivity.class));
+                                }else{
+                                    Toast.makeText(Register.this, "registration error: " + (task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }
+                        });
+
+
                     } else {
-                        Toast.makeText(Register.this, "registration error: " + (task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Register.this, "registration error: " + (task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             });

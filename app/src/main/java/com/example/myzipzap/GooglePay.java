@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,10 +22,18 @@ import com.google.android.gms.wallet.AutoResolveHelper;
 import com.google.android.gms.wallet.PaymentData;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -42,8 +51,12 @@ public class GooglePay extends AppCompatActivity {
   long dummyPriceCents;
   RadioGroup radGroup;
   RadioButton radBtn5, radBtn10, radBtn15, radBtn20;
-
+  DatabaseReference databaseReference;
   BottomNavigationView bottomNavigationView;
+  FirebaseUser currentUser;
+  private String userId;
+  long dbCredit;
+
 
   /**
    * Initialize the Google Pay API on creation of the activity
@@ -54,10 +67,11 @@ public class GooglePay extends AppCompatActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initializeUi();
-
+    currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    userId = currentUser.getUid();
     model = new ViewModelProvider(this).get(CheckoutViewModel.class);
     model.canUseGooglePay.observe(this, this::setGooglePayAvailable);
-    dummyPriceCents = QRScanner.balance;
+    dummyPriceCents = QRScanner.topUp;
     radGroup = findViewById(R.id.radioGroup);
     radBtn5 = findViewById(R.id.rad5);
     radBtn10 = findViewById(R.id.rad10);
@@ -65,6 +79,7 @@ public class GooglePay extends AppCompatActivity {
     radBtn20 = findViewById(R.id.rad20);
     bottomNavigationView = findViewById(R.id.bottomNavigationView);
     bottomNavigationView.setSelectedItemId(R.id.top_up_icon);
+
     bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
       @Override
       public boolean onNavigationItemSelected(MenuItem item) {
@@ -96,6 +111,19 @@ public class GooglePay extends AppCompatActivity {
 
         }
         return false;
+      }
+    });
+    databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
+    databaseReference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        dbCredit = snapshot.getValue(long.class);
+
+      }
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        // handle the error
+        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
       }
     });
   }
@@ -210,11 +238,17 @@ public class GooglePay extends AppCompatActivity {
       final String token = tokenizationData.getString("token");
       final JSONObject info = paymentMethodData.getJSONObject("info");
       final String billingName = info.getJSONObject("billingAddress").getString("name");
-      QRScanner.balance += dummyPriceCents;
+
+
+      ///////////////////////////////////
       Toast.makeText(
           this, getString(R.string.payments_show_name, billingName),
           Toast.LENGTH_LONG).show();
-
+      //topUp = dummyPriceCents + dbCredit;
+      HashMap userHashmap = new HashMap();
+      userHashmap.put("User Balance",dummyPriceCents + dbCredit);
+      databaseReference = FirebaseDatabase.getInstance().getReference();
+      databaseReference.child(userId).updateChildren(userHashmap);
       // Logging token string.
       Log.d("Google Pay token: ", token);
 
