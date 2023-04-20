@@ -79,11 +79,30 @@ public class GooglePay extends AppCompatActivity {
     radBtn20 = findViewById(R.id.rad20);
     bottomNavigationView = findViewById(R.id.bottomNavigationView);
     bottomNavigationView.setSelectedItemId(R.id.top_up_icon);
+    bottomNavigation();
+    retrieveDatabaseBalance();
+  }
+  public void retrieveDatabaseBalance() {
+    databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
+    databaseReference.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        dbCredit = snapshot.getValue(long.class);
 
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+        // handle the error
+        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
+  public void bottomNavigation() {
     bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
       @Override
       public boolean onNavigationItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
 
           case R.id.qr_code_icon:
             startActivity(new Intent(getApplicationContext(), QRScanner.class));
@@ -113,21 +132,7 @@ public class GooglePay extends AppCompatActivity {
         return false;
       }
     });
-    databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
-    databaseReference.addValueEventListener(new ValueEventListener() {
-      @Override
-      public void onDataChange(@NonNull DataSnapshot snapshot) {
-        dbCredit = snapshot.getValue(long.class);
-
-      }
-      @Override
-      public void onCancelled(@NonNull DatabaseError error) {
-        // handle the error
-        Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-      }
-    });
   }
-
   private void initializeUi() {
 
     // Use view binding to access the UI elements

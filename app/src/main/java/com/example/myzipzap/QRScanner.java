@@ -122,7 +122,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     public void onClick(View v) {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setPrompt("Scan the QR Code");
-        intentIntegrator.setOrientationLocked(false);
+        intentIntegrator.setOrientationLocked(true);
         intentIntegrator.initiateScan();
     }
 
