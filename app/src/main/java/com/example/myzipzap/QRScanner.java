@@ -8,17 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
+import com.example.myzipzap.util.PaymentsUtil;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.example.myzipzap.util.PaymentsUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +24,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import java.util.HashMap;
 
 // implements onClickListener for the onclick behaviour of button
 public class QRScanner extends AppCompatActivity implements View.OnClickListener {
-    //FirebaseAuth mAuth;
+    // FirebaseAuth mAuth;
 
     FloatingActionButton scanBtn;
 
@@ -40,12 +37,14 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     DatabaseReference databaseReference;
     BottomNavigationView bottomNavigationView;
 
-    String vehicleID,email, userId;
+    String vehicleID, email, userId;
 
     public static long topUp;
 
     long dbCredit, newValue;
     FirebaseUser currentUser;
+    private HashMap userHashmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,61 +64,62 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         scanBtn.setOnClickListener(this);
         userId = currentUser.getUid();
 
-            bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(MenuItem item) {
-                    switch(item.getItemId()) {
+        bottomNavigation();
+        retrieveDatabaseBalance();
+    }
+    public void bottomNavigation() {
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.qr_code_icon:
 
-                        case R.id.qr_code_icon:
+                        return true;
 
-                            return true;
+                    case R.id.top_up_icon:
+                        startActivity(new Intent(getApplicationContext(), GooglePay.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
+                    case R.id.bus_icon:
+                        startActivity(new Intent(getApplicationContext(), BusTimeActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
 
-                        case R.id.top_up_icon:
-                            startActivity(new Intent(getApplicationContext(), GooglePay.class));
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            finish();
-                            return true;
-                        case R.id.bus_icon:
-                            startActivity(new Intent(getApplicationContext(), BusTimeActivity.class));
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            finish();
-                            return true;
-
-                        case R.id.settings_icon:
-                            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            finish();
-                            return true;
-
-
+                    case R.id.settings_icon:
+                        startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        finish();
+                        return true;
                 }
                 return false;
             }
         });
+    }
+    public void retrieveDatabaseBalance() {
         databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dbCredit = snapshot.getValue(long.class);
-                //dbCredit = credit +topUp;
-                balText.setText("Balance: €" + dbCredit/100 );
-                idText.setText(userId);
-                emailText.setText(email);
-
+                setTextFields();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // handle the error
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "Cancelled: " + error, Toast.LENGTH_LONG).show();
             }
         });
-
     }
-
+    public void setTextFields() {
+        balText.setText("Balance: €" + dbCredit / 100);
+        idText.setText(userId);
+        emailText.setText(email);
+    }
     @Override
     public void onClick(View v) {
-
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setPrompt("Scan the QR Code");
         intentIntegrator.setOrientationLocked(false);
@@ -137,21 +137,16 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             } else {
                 String content = intentResult.getContents();
                 if (content.contentEquals(vehicleID)) {
-
-                    if (dbCredit >= 200.00) {
+                    if (dbCredit >= -100.00) {
                         // increment the value
                         newValue = (long) (dbCredit - 200.00);
                         balText.setText("Balance: €" + String.valueOf(dbCredit / 100) + "\nNew Balance: €" + (newValue / 100));
-                        HashMap userHashmap = new HashMap();
-                        userHashmap.put("User Balance",newValue);
-                        databaseReference = FirebaseDatabase.getInstance().getReference();
-                        databaseReference.child(userId).updateChildren(userHashmap);
+                        updateBalance();
                     } else {
                         balText.setText("Not enough funds for this \ntransaction. Please top up. ");
                     }
 
-
-                }else{
+                } else {
                     Toast.makeText(getBaseContext(), "Please scan a valid QR code", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -159,5 +154,10 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
+    public void updateBalance() {
+        userHashmap = new HashMap();
+        userHashmap.put("User Balance", newValue);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(userId).updateChildren(userHashmap);
+    }
 }
