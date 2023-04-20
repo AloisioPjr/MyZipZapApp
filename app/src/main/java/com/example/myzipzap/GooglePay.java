@@ -247,13 +247,10 @@ public class GooglePay extends AppCompatActivity {
 
       ///////////////////////////////////
       Toast.makeText(
-          this, getString(R.string.payments_show_name, billingName),
-          Toast.LENGTH_LONG).show();
-      //topUp = dummyPriceCents + dbCredit;
-      HashMap userHashmap = new HashMap();
-      userHashmap.put("User Balance",dummyPriceCents + dbCredit);
-      databaseReference = FirebaseDatabase.getInstance().getReference();
-      databaseReference.child(userId).updateChildren(userHashmap);
+              this, getString(R.string.payments_show_name, billingName),
+              Toast.LENGTH_LONG).show();
+      updateBalance();
+
       // Logging token string.
       Log.d("Google Pay token: ", token);
 
@@ -261,7 +258,12 @@ public class GooglePay extends AppCompatActivity {
       throw new RuntimeException("The selected garment cannot be parsed from the list of elements");
     }
   }
-
+  public void updateBalance(){
+    HashMap userHashmap = new HashMap();
+    userHashmap.put("User Balance", dummyPriceCents + dbCredit);
+    databaseReference = FirebaseDatabase.getInstance().getReference();
+    databaseReference.child(userId).updateChildren(userHashmap);
+  }
   /**
    * At this stage, the user has already seen a popup informing them an error occurred. Normally,
    * only logging is required.
