@@ -48,7 +48,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="left"
         android:layout_above="@+id/balContent"
-        android:text="Name"
+        android:text="Email"
         android:textStyle="bold"/>
 
     <TextView
@@ -64,7 +64,7 @@
 
     <TextView
         android:id="@+id/textFormat"
-        android:text="Message Format"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
