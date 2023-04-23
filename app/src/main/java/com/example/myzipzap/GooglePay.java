@@ -71,7 +71,7 @@ public class GooglePay extends AppCompatActivity {
     userId = currentUser.getUid();
     model = new ViewModelProvider(this).get(CheckoutViewModel.class);
     model.canUseGooglePay.observe(this, this::setGooglePayAvailable);
-    dummyPriceCents = QRScanner.topUp;
+
     radGroup = findViewById(R.id.radioGroup);
     radBtn5 = findViewById(R.id.rad5);
     radBtn10 = findViewById(R.id.rad10);
@@ -175,6 +175,9 @@ public class GooglePay extends AppCompatActivity {
       dummyPriceCents = 1500;
     } else if(radBtn20.isChecked()) {
       dummyPriceCents = 2000;
+    } else {
+      Toast.makeText(this, "Please choose an amount", Toast.LENGTH_LONG).show();
+      startActivity((new Intent(GooglePay.this, GooglePay.class)));
     }
 
     long totalPriceCents = dummyPriceCents;

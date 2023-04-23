@@ -10,7 +10,7 @@
         android:icon="@drawable/baseline_euro_24"
         android:id="@+id/top_up_icon"/>
 
-    <item android:title="Bus "
+    <item android:title="Bus Time"
         android:icon="@drawable/baseline_directions_bus_24"
         android:id="@+id/bus_icon" />
 

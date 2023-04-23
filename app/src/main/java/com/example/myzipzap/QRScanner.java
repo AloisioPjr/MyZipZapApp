@@ -48,7 +48,14 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrscanner);
+
+        bottomNavigation();
+        retrieveDatabaseBalance();
+        varInitializer();
+
+    }
+
+    private void varInitializer() {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.qr_code_icon);
@@ -63,10 +70,8 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         emailText = findViewById(R.id.textContent);
         scanBtn.setOnClickListener(this);
         userId = currentUser.getUid();
-
-        bottomNavigation();
-        retrieveDatabaseBalance();
     }
+
     public void bottomNavigation() {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -101,16 +106,17 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // handle the error
+                Toast.makeText(getBaseContext(), "Cancelled: " + error, Toast.LENGTH_LONG).show();
+            }
+            @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dbCredit = snapshot.getValue(long.class);
                 setTextFields();
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // handle the error
-                Toast.makeText(getBaseContext(), "Cancelled: " + error, Toast.LENGTH_LONG).show();
-            }
+
         });
     }
     public void setTextFields() {
@@ -127,7 +133,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
@@ -137,7 +143,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
             } else {
                 String content = intentResult.getContents();
                 if (content.contentEquals(vehicleID)) {
-                    if (dbCredit >= -100.00) {
+                    if (dbCredit >= 100.00) {
                         // increment the value
                         newValue = (long) (dbCredit - 200.00);
                         balText.setText("Balance: €" + String.valueOf(dbCredit / 100) + "\nNew Balance: €" + (newValue / 100));

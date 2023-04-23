@@ -32,7 +32,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
+      <!--  <activity
             android:name=".QRGenerator"
             android:exported="false"
             android:label="QR Generator"
@@ -40,7 +40,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
+        </activity>-->
 
         <activity
             android:name=".Register"
