@@ -48,14 +48,13 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_qrscanner);
 
+        varInitializer();
         bottomNavigation();
         retrieveDatabaseBalance();
-        varInitializer();
-
     }
-
-    private void varInitializer() {
+    public void varInitializer(){
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.qr_code_icon);
@@ -71,7 +70,6 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         scanBtn.setOnClickListener(this);
         userId = currentUser.getUid();
     }
-
     public void bottomNavigation() {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -106,17 +104,16 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         databaseReference = FirebaseDatabase.getInstance().getReference(userId).child("User Balance");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // handle the error
-                Toast.makeText(getBaseContext(), "Cancelled: " + error, Toast.LENGTH_LONG).show();
-            }
-            @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 dbCredit = snapshot.getValue(long.class);
                 setTextFields();
             }
 
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // handle the error
+                Toast.makeText(getBaseContext(), "Cancelled: " + error, Toast.LENGTH_LONG).show();
+            }
         });
     }
     public void setTextFields() {
@@ -138,9 +135,7 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
         if (intentResult != null) {
-            if (intentResult.getContents() == null) {
-                Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
-            } else {
+            if (intentResult.getContents() != null) {
                 String content = intentResult.getContents();
                 if (content.contentEquals(vehicleID)) {
                     if (dbCredit >= 100.00) {
@@ -155,8 +150,12 @@ public class QRScanner extends AppCompatActivity implements View.OnClickListener
                 } else {
                     Toast.makeText(getBaseContext(), "Please scan a valid QR code", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getBaseContext(), "Scanning cancelled", Toast.LENGTH_SHORT).show();
+
             }
         } else {
+            Toast.makeText(getBaseContext(), "QR Code Scanner not available. PLease try again later", Toast.LENGTH_LONG).show();
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
