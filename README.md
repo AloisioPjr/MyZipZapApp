@@ -25,10 +25,10 @@ The business plan is in a separate document where we are detailing all our objec
 
 1.3.	Technology
 
-The QR code is an enhanced barcode. While the barcode holds information horizontally, the QR code does so both horizontally and vertically. This enables the QR code to hold over a hundred times more information (www.tech.gov.sg, 2020).
+The QR code is an enhanced barcode. While the barcode holds information horizontally, the QR code does so both horizontally and vertically. This enables the QR code to hold over a hundred times more information (www.tech.gov.sg).
 There will be a fixed QR code that can be scanned by potential passengers after successfully logging in; once the code has been scanned, the ZipZap account that the user is logged into will be deducted €2 in credit. To make this feature possible, Android Studio was the IDE (Integrated Development Environment) used for programming. Through this IDE, various packages/libraries such as ZXing for the generation and scanning of QR codes, the Google Pay API (along with classes such as PaymentData) was used to request, accept, and process digital payments to add credit to a given account.
 The application is divided into Costumer application (general public) and Admin application (where reads QR Code). To manipulate all this data was used mostly Java code language developed in Android Studio IDE (Integrate Development Environment), an open-source software for Android operating system developed by Google and JetBrains. 
-The database used was Firebase. Firebase has created a massive buzz in the developer community. Most of the traditional backend services are quite easy to implement and get into production. Firebase is the best fit when there is a short development time, and the application demands data in real time as it is easy to scale. (Ashok Kumar S, 2018).
+The database used was Firebase. Firebase has created a massive buzz in the developer community. Most of the traditional backend services are quite easy to implement and get into production. Firebase is the best fit when there is a short development time, and the application demands data in real time as it is easy to scale.
 1.4.	Structure
 
 The application is divided into activities/classes which encapsulate all the interfaces involved in the application such as:
