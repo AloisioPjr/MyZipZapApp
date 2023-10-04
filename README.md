@@ -1,3 +1,11 @@
+Group project created for Team Project Module of BSc (Honours) in Computing year 2 
+Students: 
+Aloisio Pereira Junior 
+Juan Carlos Gimeno 
+Vinicius Masotti Bianchi 
+
+Lecturer: Frances Sheridan 
+
 Executive Summary
 
 This report aims to state the specification of the ZIPZAP mobile application. Will be included in this report the technical tools applied and the way the application was structured, what it will offer to the users. It will go in depth of why we decided to pursue this idea and its purpose. The technical implementation and technologies used to make the piece of software a useful tool.
@@ -30,10 +38,9 @@ Scanner – this is where a user can scan a QR code, which then returns a random
 TopUp – a user is given four top-up options: €5, €10, €15, €20. The value of the option is passed to the transaction details after clicking the Pay button.
 Info – this serves as an About Me page which will state information about the application.
 ![Picture3](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/ad532984-3cf0-4722-9b45-6dbc9d022baf)
-
 ![Picture4](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/2718a5e0-c81c-42e0-ad52-9594370ad3b5)
-
 ![Picture5](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/fd38ee77-fb0f-49d8-a60d-8f87dc3717c2)
+
 ![Picture6](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/62e9d56d-f83c-4226-bb31-d271feeed426)
 ![Picture7](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/92c6df87-5a46-43c2-87bc-806786c1720d)
 ![Picture8](https://github.com/AloisioPjr/MyZipZapApp/assets/22481231/ab676c05-1b24-4fb5-90a3-6d4507e23ef5)
